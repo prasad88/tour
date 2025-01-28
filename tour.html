@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+            font-size: 1.5rem;
+        }
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            width: 90%;
+            margin-top: 20px;
+        }
+        .day {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .day h2 {
+            margin-top: 0;
+            color: #007BFF;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .journey {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 120px;
+            font-size: 0.9rem;
+        }
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1rem;
+            color: #555;
+        }
+        .arrow::before {
+            content: "→";
+            font-size: 1.5rem;
+            color: #007BFF;
+        }
+        .tag {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: #333;
+            margin: 5px 0;
+        }
+        .suggested-stops {
+            margin-top: 15px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+        .suggested-stops h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                width: 95%;
+            }
+            .day {
+                padding: 10px;
+            }
+            .day h2 {
+                font-size: 1rem;
+            }
+            .journey {
+                gap: 10px;
+            }
+            .stop {
+                width: 100px;
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+            .arrow {
+                font-size: 0.9rem;
+            }
+            .arrow::before {
+                font-size: 1.2rem;
+            }
+            .suggested-stops {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            .suggested-stops h3 {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+            .journey {
+                flex-direction: column;
+                align-items: center;
+            }
+            .arrow {
+                font-size: 0.8rem;
+            }
+            .arrow::before {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <script>
+        const tripData = [
+            {
+                date: "01/02/2025",
+                from: "Pune",
+                to: "Kevadia",
+                distance: "560 km",
+                time: "10 hrs",
+                suggestedStops: "Trimbakeshwar Temple (~30 km detour)"
+            },
+            {
+                date: "02/02/2025",
+                from: "Kevadia",
+                to: "Ahmedabad",
+                distance: "200 km",
+                time: "4 hrs",
+                suggestedStops: "Statue of Unity, Sardar Sarovar Dam"
+            },
+            {
+                date: "03/02/2025",
+                from: "Ahmedabad",
+                to: "Heritage Resort",
+                distance: "190 km",
+                time: "4.5 hrs",
+                suggestedStops: "Rani ki Vav (Patan, UNESCO World Heritage site)"
+            },
+            {
+                date: "04/02/2025",
+                from: "Heritage Resort",
+                to: "Mandvi Beach",
+                distance: "320 km",
+                time: "6.5 hrs",
+                suggestedStops: "Bhuj attractions: Aina Mahal, Prag Mahal"
+            },
+            {
+                date: "05/02/2025",
+                from: "Mandvi Beach",
+                to: "Amrut Bagh Resort",
+                distance: "120 km",
+                time: "3 hrs",
+                suggestedStops: "Vijay Vilas Palace, Mandvi shipbuilding yard"
+            },
+            {
+                date: "06/02/2025",
+                from: "Amrut Bagh Resort",
+                to: "Vadodara",
+                distance: "260 km",
+                time: "5.5 hrs",
+                suggestedStops: "Indian Wild Ass Sanctuary (~30 km detour)"
+            },
+            {
+                date: "07/02/2025",
+                from: "Vadodara",
+                to: "Nashik",
+                distance: "360 km",
+                time: "7 hrs",
+                suggestedStops: "Sayaji Garden, Laxmi Vilas Palace"
+            },
+            {
+                date: "08/02/2025",
+                from: "Nashik",
+                to: "Pune",
+                distance: "220 km",
+                time: "5 hrs",
+                suggestedStops: "Pandav Leni Caves"
+            }
+        ];
+
+        function renderTimeline() {
+            const timelineContainer = document.querySelector('.timeline');
+            tripData.forEach((day, index) => {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.innerHTML = `
+                    <h2>${day.date}: ${day.from} to ${day.to}</h2>
+                    <div class="journey">
+                        <div class="stop">
+                            <strong>${day.from}</strong>
+                            ${index === 0 ? '<div class="tag">Start</div>' : ''}
+                        </div>
+                        <div class="arrow">
+                            <span>${day.distance} / ${day.time}</span>
+                        </div>
+                        <div class="stop">
+                            <strong>${day.to}</strong>
+                            ${index === tripData.length - 1 ? '<div class="tag">End</div>' : ''}
+                        </div>
+                    </div>
+                    <div class="suggested-stops">
+                        <h3>Suggested Stops:</h3>
+                        <p>${day.suggestedStops}</p>
+                    </div>
+                `;
+                timelineContainer.appendChild(dayElement);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTimeline);
+    </script>
+</head>
+<body>
+    <h1>Trip Tracker: Pune to Mandvi and Back</h1>
+    <div class="timeline"></div>
+</body>
+</html>
